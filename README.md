@@ -1,16 +1,17 @@
 :warning: Everything between << >> needs to be replaced (remove << >> after replacing)
 # CS110 Project Proposal
-# << Project Title >>
+# Multi-Player Multi-Wars
 ## CS 110 Final Project
-### << Semester, Year >>
+### S1, 2022
 ### [Assignment Description](https://docs.google.com/document/d/1H4R6yLL7som1lglyXWZ04RvTp_RvRFCCBn6sqv-82ps/edit?usp=sharing)
 
-<< [repl](#) >>
+(https://replit.com/join/eahmnqexrn-coreysammataro1)
 
 << [link to demo presentation slides](#) >>
 
-### Team: << team name >>
+### Team: Corey and Tamanna
 #### << Team Members >>
+Corey and Tamanna
 
 ***
 
