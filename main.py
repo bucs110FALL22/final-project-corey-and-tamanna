@@ -2,7 +2,7 @@ import pygame
 import src.controller
 def main():
   pygame.init()
-  controller = src.controller.Controller(font = 'etc/ARCADECLASSIC.TTF', font_size = 75)
+  controller = src.controller.Controller()
   controller.mainloop()
     #Create an instance on your controller object
     #Call your mainloop
