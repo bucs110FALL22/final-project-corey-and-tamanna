@@ -18,7 +18,7 @@ Corey and Tamanna
 ## Project Description
 
 << Give an overview of your project >>
-
+Our game is a simple 1 v 1 game where the goal is to shoot your opponent 3 times. There is also a main menu screen, as well as an interactive controls screen to help players understand how to play.
 ***    
 
 ## User Interface Design
@@ -44,24 +44,48 @@ Corey and Tamanna
         * ![class diagram](assets/class_diagram.jpg) 
 * Classes
     * << You should have a list of each of your classes with a description. >>
-
-## Project Structure and File List
+    Controller
+    Obstacle
+    Player
+    Projectile
+## Project Structure and File List ***
 
 The Project is broken down into the following file structure:
 
 * main.py
 * src
     * << all of your python files should go here >>
+    * controller.py
+    * obstacles.py
+    * player.py
+    * projectile.py
 * assets
     * << all of your media, i.e. images, font files, etc, should go here) >>
+    * character (folder)
+      * charcter up/down/right/left for blue and red
+    * health (folder)
+      * health bar level 1-3 for both blue and red
+    * keyboard (folder)
+      * white and colored images of keys used on controlls screen
+    * map_stuff (folder)
+      * includes the background image as well images for obstacle class
+    * bullet.png
+      * image for bullet class
+    * (red/white)arrow.png
+      * images for red and white arrow respectivly used for back arrows
 * etc
     * << This is a catch all folder for things that are not part of your project, but you want to keep with your project >>
+    * ARCADECLASSIC.TFF
+      * (IDK if this goes here) The font used for texts in the code
 
 ***
 
-## Tasks and Responsibilities 
+## Tasks and Responsibilities ***
 
    * Outline the team member roles and who was responsible for each class/method, both individual and collaborative.
+   * As mentioned in the message sent to Professor Moore. Due to problems with Tam's replit, it ended up that I (Corey) practicaly did all the physical code. 
+
+
 
 ## Testing
 

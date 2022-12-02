@@ -63,7 +63,9 @@ class Player(pygame.sprite.Sprite):
       self.image = pygame.transform.scale(self.image, (25,50))
   def take_damage(self):
     self.health -= 1
-
+  def reset_health(self):
+    self.health = 3
+    
 
       
       

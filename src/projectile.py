@@ -6,7 +6,7 @@ class Projectile(pygame.sprite.Sprite):
     self.width = size[0]
     self.height = size[1]
     self.direction = direction
-    self.offset = 10
+    self.offset = 30
     self.image = pygame.image.load("assets/bullet.png")
     self.image = pygame.transform.scale(self.image, (10,10))
     self.rect = self.image.get_rect()
@@ -15,7 +15,7 @@ class Projectile(pygame.sprite.Sprite):
       self.rect.y = y
     if self.direction == 's':
       self.rect.x = x
-      self.rect.y = y+self.offset
+      self.rect.y = y + 2*self.offset
     if self.direction == 'w':
       self.rect.x = x-self.offset
       self.rect.y = y

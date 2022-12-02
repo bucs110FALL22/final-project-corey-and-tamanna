@@ -19,21 +19,26 @@ class Controller:
     self.font = pygame.font.Font(self.font, self.font_size)
     self.color_white = (255, 255, 255)
     self.color_red = (255, 0, 0)
-    self.menu_color1 = (self.color_white)
-    self.menu_color2 = (self.color_white)
-    self.menu_color3 = (self.color_white)
-    
-    self.text_surface1 = self.font.render('Play Game', True, self.menu_color1)
+  
+    self.text_surface1 = self.font.render('Play Game', True, self.color_white)
     self.text_rect1 = self.text_surface1.get_rect()
     self.text_rect1.center = (self.width/2, self.height/6)
 
-    self.text_surface2 = self.font.render('Controls', True, self.menu_color2)
+    self.text_surface2 = self.font.render('Controls', True, self.color_white)
     self.text_rect2 = self.text_surface2.get_rect()
     self.text_rect2.center = (self.width/2, self.height/2)
 
-    self.text_surface3 = self.font.render('Quit Game', True, self.menu_color3)
+    self.text_surface3 = self.font.render('Quit Game', True, self.color_white)
     self.text_rect3 = self.text_surface3.get_rect()       
     self.text_rect3.center = (self.width/2, 5*self.height/6)
+
+    self.menu_text = self.font.render('Main Menu', True, self.color_white)
+    self.menu_text_rect = self.menu_text.get_rect()
+    self.menu_text_rect.center = (self.width/2, self.height/3)
+
+    self.quit_text = self.text_surface3
+    self.quit_text_rect = self.quit_text.get_rect()
+    self.quit_text_rect.center = (self.width/2, 2*self.height/3)
 
     self.arrowwhite = pygame.image.load('assets/whitebackarrow.png')
     self.arrowwhite = pygame.transform.scale(self.arrowwhite, (100, 100))
@@ -123,6 +128,24 @@ class Controller:
     self.space_key_rect.center = (self.width/2, 8*self.height/9)
     self.space_holder = self.space_key
 
+    self.p1_health3 = pygame.image.load('assets/health/p1_health3.png')
+    self.p1_health2 = pygame.image.load('assets/health/p1_health2.png')
+    self.p1_health1 = pygame.image.load('assets/health/p1_health1.png')
+    self.p1_health3 = pygame.transform.scale(self.p1_health3, (3*self.width/13, self.height/16))
+    self.p1_health2 = pygame.transform.scale(self.p1_health2, (3*self.width/13, self.height/16))
+    self.p1_health1 = pygame.transform.scale(self.p1_health1, (3*self.width/13, self.height/16))
+    self.p1_health_rect = self.p1_health1.get_rect()
+    self.p1_health_rect.topleft = (0, 0)
+    
+    self.p2_health3 = pygame.image.load('assets/health/p2_health3.png')
+    self.p2_health2 = pygame.image.load('assets/health/p2_health2.png')
+    self.p2_health1 = pygame.image.load('assets/health/p2_health1.png')
+    self.p2_health3 = pygame.transform.scale(self.p2_health3, (3*self.width/13, self.height/16))
+    self.p2_health2 = pygame.transform.scale(self.p2_health2, (3*self.width/13, self.height/16))
+    self.p2_health1 = pygame.transform.scale(self.p2_health1, (3*self.width/13, self.height/16))
+    self.p2_health_rect = self.p2_health1.get_rect()
+    self.p2_health_rect.right = (self.width)
+    
     self.controls_text = pygame.image.load('assets/keyboard/Controls_Text.png')
     self.controls_text_rect = self.controls_text.get_rect()
     self.controls_text_rect.center = (self.width/2, self.height/1.5)  
@@ -292,11 +315,32 @@ class Controller:
             self.p2.move_down()
           if event.key == pygame.K_SPACE:
             self.bullet.add(Projectile(x = self.p2.rect.x, y = self.p2.rect.y, direction = self.p2.direction))
-            
+      for bullets in self.bullet:
+        if pygame.sprite.collide_rect(self.p1, bullets):
+          self.p1.take_damage()
+          bullets.kill()
+        if pygame.sprite.collide_rect(self.p2, bullets):
+          self.p2.take_damage()
+          bullets.kill()
       #update data
-            #THIS IS WHERE YOU TEST IF PLAYER AND THING COLIDE, IF THEY DO KILL PROJECTILE AND PLAYER LOSES 1 HEALTH. TO TEST EVERY BULLET MUST USE FOR LOOP TO LOOP THROUGH THE SPRITE GROUP. 
+      if self.p1.health == 3:
+        p1_health = self.p1_health3
+      if self.p1.health == 2:
+        p1_health = self.p1_health2
+      if self.p1.health == 1:
+        p1_health = self.p1_health1
+      if self.p2.health == 3:
+        p2_health = self.p2_health3
+      if self.p2.health == 2:
+        p2_health = self.p2_health2
+      if self.p2.health == 1:
+        p2_health = self.p2_health1
+          
       #redraw
       if self.p1.health < 1 or self.p2.health < 1:
+        self.p1.reset_health()
+        self.p2.reset_health()
+        self.bullet.empty()
         self.STATE = 'over'
       self.screen.blit(self.background, (0,0))
       self.screen.blit(self.p1.image, self.p1.rect)
@@ -306,11 +350,40 @@ class Controller:
       for bullets in self.bullet:
         self.screen.blit(bullets.image, bullets.rect)
       self.bullet.update()
+      self.screen.blit(p1_health, self.p1_health_rect)
+      self.screen.blit(p2_health, self.p2_health_rect)
       pygame.display.update()
+  
+  
+  
   def gameoverloop(self):
     while self.STATE == 'over':
       #event loop
-      print('gameover')
+      for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+          sys.exit()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+          if self.menu_text_rect.collidepoint(pygame.mouse.get_pos()):
+            
+            self.STATE = 'menu'
+          if self.quit_text_rect.collidepoint(pygame.mouse.get_pos()):
+            sys.exit()
       #update data
-
+      if self.menu_text_rect.collidepoint(pygame.mouse.get_pos()):
+        self.menu_color1 = self.color_red
+      else:
+        self.menu_color1 = self.color_white
+      if self.quit_text_rect.collidepoint(pygame.mouse.get_pos()):
+        self.menu_color2 = self.color_red
+      else:
+        self.menu_color2 = self.color_white
       #redraw
+      self.screen.fill('black')
+
+      self.menu_text = self.font.render('Main Menu', True, self.menu_color1)
+      self.screen.blit(self.menu_text, self.menu_text_rect)
+      
+      self.quit_text = self.font.render('Quit Game', True, self.menu_color2)
+      self.screen.blit(self.quit_text, self.quit_text_rect)
+      
+      pygame.display.update()
