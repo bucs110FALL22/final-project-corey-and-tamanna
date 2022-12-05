@@ -442,7 +442,7 @@ class Controller:
       else:
         self.menu_color2 = self.color_white
 
-      self.score = self.font.render(f'Blue Wins {self.bluewins} ||| Red Wins {self.redwins}', True, self.color_white)
+      self.score = self.font.render(f'Blue Wins {self.bluewins}  Red Wins {self.redwins}', True, self.color_white)
       self.score_rect = self.score.get_rect()
       self.score_rect.center = (self.width/2, self.height/12)
       #redraw
