@@ -7,6 +7,11 @@ import random
 class Controller:
   
   def __init__(self, font = 'etc/ARCADECLASSIC.TTF', font_size = 75):
+    '''
+    sets up and loads all data required to run game
+    args: font: str containging font file location, font_size: font size for menu screen
+    No return
+    '''
     #setup pygame data
     self.screen = pygame.display.set_mode()
     size = pygame.display.get_window_size()
@@ -121,9 +126,9 @@ class Controller:
     self.right_holder = self.right_key
 
     self.space_key = pygame.image.load('assets/keyboard/SpaceBar_White.png')
-    self.space_key = pygame.transform.scale(self.space_key, (self.width/9, self.width/9))
+    self.space_key = pygame.transform.scale(self.space_key, (self.width/3, self.width/9))
     self.space_key_red = pygame.image.load('assets/keyboard/SpaceBar_Red.png')
-    self.space_key_red = pygame.transform.scale(self.space_key_red, (self.width/9, self.width/9))
+    self.space_key_red = pygame.transform.scale(self.space_key_red, (self.width/3, self.width/9))
     self.space_key_rect = self.space_key.get_rect()
     self.space_key_rect.center = (self.width/2, 8*self.height/9)
     self.space_holder = self.space_key
@@ -159,9 +164,23 @@ class Controller:
       self.environment.add(Obstacle(random.randint(0, self.width-10), (random.randint(0,self.height-10))))
 
     self.bullet = pygame.sprite.Group()
+
+    myfile = open("assets/data/redwins.txt", "r")
+    self.redwins = int(myfile.read())
+    myfile.close()
+
+    myfile = open("assets/data/bluewins.txt", "r")
+    self.bluewins = int(myfile.read())
+    myfile.close()
+        
     
     self.STATE = "menu"
   def mainloop(self):
+    '''
+    main loop of game that handles which sub loop the game is in
+    arg: (Controller) self controller
+    retruns: (str) with current state
+    '''
     while True:
       if self.STATE == 'menu':
         self.menuloop()
@@ -171,8 +190,13 @@ class Controller:
         self.gameloop()
       elif self.STATE == 'over':
         self.gameoverloop()
-  
+    return self.STATE
   def menuloop(self):
+    '''
+    loop for the menu state of the game
+    args: (Controller) self Controller
+    returns: (str) with current state
+    '''
     while self.STATE == "menu":
       
       #event loop
@@ -213,8 +237,13 @@ class Controller:
       self.screen.blit(self.text_surface3, self.text_rect3)
       
       pygame.display.update()
- 
+    return self.STATE
   def controlsloop(self):
+    '''
+    loop for the controls state of the game
+    args: (Controller) self Controller
+    returns: (str) with current state
+    '''
     while self.STATE == 'controls':
       for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -288,7 +317,12 @@ class Controller:
       self.screen.blit(self.controls_text, self.controls_text_rect)
       
       pygame.display.update()
+    return self.STATE
   def gameloop(self):
+    '''
+    loop for the game state of the game
+    args: (Controller) self Controller
+    returns: (str) with current state'''
     while self.STATE == 'game': 
     #event loop
       for event in pygame.event.get():
@@ -335,13 +369,39 @@ class Controller:
         p2_health = self.p2_health2
       if self.p2.health == 1:
         p2_health = self.p2_health1
-          
-      #redraw
-      if self.p1.health < 1 or self.p2.health < 1:
+
+
+      if self.p1.health < 1:
         self.p1.reset_health()
         self.p2.reset_health()
         self.bullet.empty()
+        myfile = open("assets/data/redwins.txt", "r")
+        value = int(myfile.read())
+        myfile.close()
+        value += 1
+        myfile = open("assets/data/redwins.txt", "w")
+        myfile.write(str(value))
+        myfile.close()
+        self.redwins = value
         self.STATE = 'over'
+      
+      if self.p2.health < 1:
+        self.p1.reset_health()
+        self.p2.reset_health()
+        self.bullet.empty()
+        myfile = open("assets/data/bluewins.txt", "r")
+        value = int(myfile.read())
+        myfile.close()
+        value += 1
+        myfile = open("assets/data/bluewins.txt", "w")
+        myfile.write(str(value))
+        myfile.close()
+        self.bluewins = value
+        self.STATE = 'over'
+        
+      #redraw
+
+        
       self.screen.blit(self.background, (0,0))
       self.screen.blit(self.p1.image, self.p1.rect)
       self.screen.blit(self.p2.image, self.p2.rect)
@@ -353,10 +413,14 @@ class Controller:
       self.screen.blit(p1_health, self.p1_health_rect)
       self.screen.blit(p2_health, self.p2_health_rect)
       pygame.display.update()
-  
+    return self.STATE
   
   
   def gameoverloop(self):
+    '''
+    loop for the gameover state of the game
+    args: (Controller) self Controller
+    returns: (str) with current state'''
     while self.STATE == 'over':
       #event loop
       for event in pygame.event.get():
@@ -377,6 +441,10 @@ class Controller:
         self.menu_color2 = self.color_red
       else:
         self.menu_color2 = self.color_white
+
+      self.score = self.font.render(f'Blue Wins {self.bluewins} ||| Red Wins {self.redwins}', True, self.color_white)
+      self.score_rect = self.score.get_rect()
+      self.score_rect.center = (self.width/2, self.height/12)
       #redraw
       self.screen.fill('black')
 
@@ -385,5 +453,8 @@ class Controller:
       
       self.quit_text = self.font.render('Quit Game', True, self.menu_color2)
       self.screen.blit(self.quit_text, self.quit_text_rect)
+      self.screen.blit(self.score, self.score_rect)
+    
       
       pygame.display.update()
+    return self.STATE

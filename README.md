@@ -83,7 +83,7 @@ The Project is broken down into the following file structure:
 ## Tasks and Responsibilities ***
 
    * Outline the team member roles and who was responsible for each class/method, both individual and collaborative.
-   * As mentioned in the message sent to Professor Moore. Due to problems with Tam's replit, it ended up that I (Corey) practicaly did all the physical code. 
+   * As mentioned in the message sent to Professor Moore. Due to technical problems with Tamanna's replit, it ended up that I (Corey) practicaly did all the physical code. 
 
 
 
